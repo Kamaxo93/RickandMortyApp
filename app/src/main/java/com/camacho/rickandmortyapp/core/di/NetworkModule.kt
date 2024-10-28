@@ -1,6 +1,7 @@
 package com.camacho.rickandmortyapp.core.di
 
 import com.camacho.rickandmortyapp.data.constan.Constant.BASE_URL
+import com.camacho.rickandmortyapp.data.remote.service.RickAndMortyService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,5 +30,11 @@ class NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRickAndMortyApi(retrofit: Retrofit): RickAndMortyService {
+        return retrofit.create(RickAndMortyService::class.java)
     }
 }
