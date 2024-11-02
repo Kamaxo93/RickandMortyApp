@@ -1,5 +1,6 @@
 package com.camacho.rickandmortyapp.core.di
 
+import com.camacho.rickandmortyapp.data.local.datasource.RickAndMortyLocalDataSource
 import com.camacho.rickandmortyapp.data.remote.datasorce.RickAndMortyRemoteDataSource
 import com.camacho.rickandmortyapp.data.repository.RickAndMortyRepositoryImpl
 import com.camacho.rickandmortyapp.domain.repository.RickAndMortyRepository
@@ -15,8 +16,11 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideRickAndMortyRepository(dataSource: RickAndMortyRemoteDataSource): RickAndMortyRepository {
-        return RickAndMortyRepositoryImpl(dataSource)
+    fun provideRickAndMortyRepository(
+        remoteDataSource: RickAndMortyRemoteDataSource,
+        localDataSource: RickAndMortyLocalDataSource
+    ): RickAndMortyRepository {
+        return RickAndMortyRepositoryImpl(remoteDataSource, localDataSource)
     }
 
 }

@@ -1,11 +1,15 @@
-package com.camacho.rickandmortyapp.domain.model
+package com.camacho.rickandmortyapp.data.local.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class CharacterDomain(
+@Entity
+data class CharacterEntity(
+    @PrimaryKey
+    val id: Int,
     val created: String,
     val episode: List<String>,
     val gender: String,
-    val id: Int,
     val image: String,
     val location: String,
     val name: String,
@@ -13,5 +17,5 @@ data class CharacterDomain(
     val species: String,
     val status: String,
     val type: String,
-    val url: String
+    val url: String,
 )

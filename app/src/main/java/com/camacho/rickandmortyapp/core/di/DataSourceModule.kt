@@ -1,5 +1,8 @@
 package com.camacho.rickandmortyapp.core.di
 
+import com.camacho.rickandmortyapp.data.local.dao.RickAndMortyDao
+import com.camacho.rickandmortyapp.data.local.datasource.RickAndMortyLocalDataSource
+import com.camacho.rickandmortyapp.data.local.datasource.RickAndMortyLocalDataSourceImpl
 import com.camacho.rickandmortyapp.data.remote.datasorce.RickAndMortyRemoteDataSource
 import com.camacho.rickandmortyapp.data.remote.datasorce.RickAndMortyRemoteDataSourceImpl
 import com.camacho.rickandmortyapp.data.remote.service.RickAndMortyService
@@ -11,11 +14,18 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class RemoteModule {
+class DataSourceModule {
 
     @Provides
     @Singleton
     fun provideRemoteDataSource(service: RickAndMortyService): RickAndMortyRemoteDataSource {
         return RickAndMortyRemoteDataSourceImpl(service)
     }
+
+    @Provides
+    @Singleton
+    fun provideLocalDataSource(dao: RickAndMortyDao): RickAndMortyLocalDataSource {
+        return RickAndMortyLocalDataSourceImpl(dao)
+    }
+
 }

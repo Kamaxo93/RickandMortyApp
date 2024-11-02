@@ -1,24 +1,25 @@
 package com.camacho.rickandmortyapp.data.remote.datasorce
 
-import com.camacho.rickandmortyapp.data.remote.mapper.toDomain
-import com.camacho.rickandmortyapp.data.remote.mapper.toDomains
+import com.camacho.rickandmortyapp.core.common.orZero
+import com.camacho.rickandmortyapp.data.constan.Constant.MAX_NUMBER_CHARACTER
+import com.camacho.rickandmortyapp.data.constan.Constant.MAX_NUMBER_PAGE
+import com.camacho.rickandmortyapp.data.local.model.CharacterEntity
+import com.camacho.rickandmortyapp.data.remote.mapper.toEntities
 import com.camacho.rickandmortyapp.data.remote.service.RickAndMortyService
-import com.camacho.rickandmortyapp.domain.model.CharacterDomain
 
 
 interface RickAndMortyRemoteDataSource {
-
-    suspend fun getAllCharacters(): List<CharacterDomain>
-
-    suspend fun getDetailsCharacter(id: Int): CharacterDomain
+    suspend fun getAllCharacters(page: Int?): List<CharacterEntity>
 }
 
-class RickAndMortyRemoteDataSourceImpl(private val service: RickAndMortyService) : RickAndMortyRemoteDataSource {
+class RickAndMortyRemoteDataSourceImpl(private val service: RickAndMortyService) :
+    RickAndMortyRemoteDataSource {
 
-    override suspend fun getAllCharacters(): List<CharacterDomain> =
-        service.getAllCharacters().toDomains()
-
-    override suspend fun getDetailsCharacter(id: Int): CharacterDomain =
-        service.getDetailCharacter(id).toDomain()
+    override suspend fun getAllCharacters(page: Int?): List<CharacterEntity> {
+        val response = service.getAllCharacters(page.orZero())
+        MAX_NUMBER_PAGE = response.info?.pages.orZero()
+        MAX_NUMBER_CHARACTER = response.info?.count.orZero()
+        return response.toEntities()
+    }
 
 }

@@ -1,38 +1,51 @@
 package com.camacho.rickandmortyapp.data.repository
 
-import com.camacho.loompasapp.core.async.AsyncError
-import com.camacho.loompasapp.core.async.AsyncResult
-import com.camacho.loompasapp.core.async.RepositoryErrorManager
+import com.camacho.rickandmortyapp.core.async.AsyncResult
+import com.camacho.rickandmortyapp.core.async.RepositoryErrorManager
+import com.camacho.rickandmortyapp.data.constan.Constant.MAX_NUMBER_PAGE
+import com.camacho.rickandmortyapp.data.local.datasource.RickAndMortyLocalDataSource
+import com.camacho.rickandmortyapp.data.local.mapper.toDomains
+import com.camacho.rickandmortyapp.data.local.model.CharacterEntity
 import com.camacho.rickandmortyapp.data.remote.datasorce.RickAndMortyRemoteDataSource
 import com.camacho.rickandmortyapp.domain.model.CharacterDomain
 import com.camacho.rickandmortyapp.domain.repository.RickAndMortyRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
-class RickAndMortyRepositoryImpl(private val dataSource: RickAndMortyRemoteDataSource) :
+class RickAndMortyRepositoryImpl(
+    private val remoteDataSource: RickAndMortyRemoteDataSource,
+    private val localDataSource: RickAndMortyLocalDataSource
+) :
     RickAndMortyRepository {
-    private val characters = mutableListOf<CharacterDomain>()
+    val list = mutableListOf<CharacterEntity>()
 
-    override suspend fun getAllCharacters(): Flow<AsyncResult<List<CharacterDomain>>> {
-        return if (characters.isNotEmpty()) {
-            return flow { emit(AsyncResult.Success(characters)) }
+    override suspend fun getAllCharacters(): Flow<List<CharacterDomain>> {
+        return localDataSource.getAllCharacters().map {
+            it.toDomains()
+        }
+    }
 
-        } else {
-            RepositoryErrorManager.wrap {
-                characters.addAll(dataSource.getAllCharacters())
-                characters
+    override suspend fun addCharactersToLocal() {
+        getCharactersFromRemote(null).collect {
+            if (it is AsyncResult.Success) {
+               list.addAll(it.data)
+                for (i in 2..MAX_NUMBER_PAGE) {
+                    getCharactersFromRemote(i).collect {
+                        if (it is AsyncResult.Success) {
+                            list.addAll(it.data)
+                        }
+                    }
+                }
             }
         }
+        localDataSource.addCharacter(list)
     }
 
-
-    override fun getDetailCharacter(id: Int): Flow<AsyncResult<CharacterDomain>> = flow {
-        emit(AsyncResult.Loading())
-        if (characters.isEmpty()) {
-            emit(AsyncResult.Error(AsyncError.EmptyResponseError))
-
-        } else {
-            emit(AsyncResult.Success(characters.first { it.id == id }))
+    private suspend fun getCharactersFromRemote(page: Int?):
+            Flow<AsyncResult<List<CharacterEntity>>> {
+        return RepositoryErrorManager.wrap {
+            remoteDataSource.getAllCharacters(page)
         }
     }
+
 }

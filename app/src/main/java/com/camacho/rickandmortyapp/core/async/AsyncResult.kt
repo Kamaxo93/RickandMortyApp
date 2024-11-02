@@ -1,4 +1,4 @@
-package com.camacho.loompasapp.core.async
+package com.camacho.rickandmortyapp.core.async
 
 sealed class AsyncResult<T> {
     class Loading<T> : AsyncResult<T>()
