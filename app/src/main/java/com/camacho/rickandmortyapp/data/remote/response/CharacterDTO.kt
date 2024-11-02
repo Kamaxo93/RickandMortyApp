@@ -15,11 +15,11 @@ data class CharacterDTO(
     @SerializedName("image")
     val image: String?,
     @SerializedName("location")
-    val location: Location?,
+    val location: LocationDTO?,
     @SerializedName("name")
     val name: String?,
     @SerializedName("origin")
-    val origin: Origin?,
+    val origin: OriginDTO?,
     @SerializedName("species")
     val species: String?,
     @SerializedName("status")

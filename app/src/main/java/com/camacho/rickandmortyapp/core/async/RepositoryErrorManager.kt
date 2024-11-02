@@ -1,4 +1,4 @@
-package com.camacho.loompasapp.core.async
+package com.camacho.rickandmortyapp.core.async
 
 import com.google.gson.JsonParseException
 import kotlinx.coroutines.flow.Flow

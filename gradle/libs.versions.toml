@@ -17,6 +17,9 @@ retrofit = "2.9.0"
 gson = "2.10.1"
 interceptor = "4.11.0"
 coil = "2.5.0"
+room = "2.6.1"
+kotlinxSerialization = "1.6.3"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +47,11 @@ retrofit-converter = { group = "com.squareup.retrofit2", name = "converter-gson"
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "interceptor"}
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil"}
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room"}
+room-compile = { group = "androidx.room", name = "room-compiler", version.ref = "room"}
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -51,5 +59,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+jetbrainsKotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
 
 

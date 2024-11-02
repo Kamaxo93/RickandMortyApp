@@ -3,7 +3,7 @@ package com.camacho.rickandmortyapp.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class Info(
+data class InfoDTO(
     @SerializedName("count")
     val count: Int?,
     @SerializedName("next")

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kapt)
     alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.jetbrainsKotlinSerialization)
 }
 
 android {
@@ -54,7 +55,6 @@ dependencies {
     implementation(libs.androidx.material.extend)
     implementation(libs.androidx.constraintlayout.compose)
 
-
     //Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
@@ -62,6 +62,7 @@ dependencies {
 
     //Navigation
     implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     //Retrofit
     implementation(libs.retrofit)
@@ -71,6 +72,11 @@ dependencies {
 
     //Coil
     implementation(libs.coil)
+
+    //Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compile)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

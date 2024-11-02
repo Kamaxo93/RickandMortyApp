@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class RickAndMortyResponse(
     @SerializedName("info")
-    val info: Info?,
+    val info: InfoDTO?,
     @SerializedName("results")
     val results: List<CharacterDTO?>?
 )
