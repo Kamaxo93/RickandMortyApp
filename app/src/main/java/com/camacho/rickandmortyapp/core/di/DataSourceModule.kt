@@ -1,5 +1,6 @@
 package com.camacho.rickandmortyapp.core.di
 
+import android.content.SharedPreferences
 import com.camacho.rickandmortyapp.data.local.dao.RickAndMortyDao
 import com.camacho.rickandmortyapp.data.local.datasource.RickAndMortyLocalDataSource
 import com.camacho.rickandmortyapp.data.local.datasource.RickAndMortyLocalDataSourceImpl
@@ -18,8 +19,11 @@ class DataSourceModule {
 
     @Provides
     @Singleton
-    fun provideRemoteDataSource(service: RickAndMortyService): RickAndMortyRemoteDataSource {
-        return RickAndMortyRemoteDataSourceImpl(service)
+    fun provideRemoteDataSource(
+        service: RickAndMortyService,
+        @MySharedPrefs sharedPreferences: SharedPreferences
+    ): RickAndMortyRemoteDataSource {
+        return RickAndMortyRemoteDataSourceImpl(service, sharedPreferences)
     }
 
     @Provides

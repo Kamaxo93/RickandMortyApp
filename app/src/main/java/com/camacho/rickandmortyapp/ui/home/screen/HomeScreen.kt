@@ -3,13 +3,15 @@ package com.camacho.rickandmortyapp.ui.home.screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.camacho.rickandmortyapp.R
+import com.camacho.rickandmortyapp.ui.home.compose.CharactersContainerError
+import com.camacho.rickandmortyapp.ui.home.compose.LoginRickAndMorty
+import com.camacho.rickandmortyapp.ui.home.compose.RickAndMortyCharacterList
 import com.camacho.rickandmortyapp.ui.home.viewmodel.HomeViewModel
 
 
@@ -32,19 +34,19 @@ fun HomeScreen(
 
     when {
         state.isLoading -> {
-            CircularProgressIndicator()
+            LoginRickAndMorty()
         }
+
         state.error != null -> {
-
+            CharactersContainerError() {
+                viewModel.reload()
+            }
         }
+
         state.characters.isNullOrEmpty().not() -> {
-
-        }
-
-        else -> {
-
+            RickAndMortyCharacterList(characters = state.characters) {
+                onItemClick(it)
+            }
         }
     }
-
-
 }
