@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -89,7 +88,7 @@ fun LoginRickAndMorty() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ToolbarRickAndMorty(modifier: Modifier = Modifier, onFilterClicked: (Boolean) -> Unit) {
+fun ToolbarRickAndMorty(onFilterClicked: (Boolean) -> Unit) {
     var showMenu by remember { mutableStateOf(false) }
 
     TopAppBar(

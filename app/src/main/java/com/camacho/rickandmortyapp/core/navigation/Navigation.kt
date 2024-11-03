@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.camacho.rickandmortyapp.ui.detail.screen.DetailScreen
 import com.camacho.rickandmortyapp.ui.home.screen.HomeScreen
 
 
@@ -19,7 +20,7 @@ fun NavigationRickAndMorty() {
 
         composable<Detail> { backStackEntry ->
             val detail: Detail = backStackEntry.toRoute()
-//            DetailScreen(name = detail.id)
+            DetailScreen(id = detail.id)
         }
     }
 }

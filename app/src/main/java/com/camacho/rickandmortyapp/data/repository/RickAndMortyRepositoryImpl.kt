@@ -1,11 +1,13 @@
 package com.camacho.rickandmortyapp.data.repository
 
 import android.content.SharedPreferences
+import com.camacho.rickandmortyapp.core.async.AsyncError
 import com.camacho.rickandmortyapp.core.async.AsyncResult
 import com.camacho.rickandmortyapp.core.async.RepositoryErrorManager
 import com.camacho.rickandmortyapp.core.di.MySharedPrefs
 import com.camacho.rickandmortyapp.data.constan.Constant.MAX_NUMBER_PAGE
 import com.camacho.rickandmortyapp.data.local.datasource.RickAndMortyLocalDataSource
+import com.camacho.rickandmortyapp.data.local.mapper.toDomain
 import com.camacho.rickandmortyapp.data.local.mapper.toDomains
 import com.camacho.rickandmortyapp.data.local.model.CharacterEntity
 import com.camacho.rickandmortyapp.data.remote.datasorce.RickAndMortyRemoteDataSource
@@ -13,6 +15,7 @@ import com.camacho.rickandmortyapp.domain.model.CharacterDomain
 import com.camacho.rickandmortyapp.domain.repository.RickAndMortyRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 
 class RickAndMortyRepositoryImpl(
@@ -46,6 +49,20 @@ class RickAndMortyRepositoryImpl(
                 }
             }
             localDataSource.addCharacter(list)
+        }
+    }
+
+    override suspend fun getCharacter(id: String): Flow<AsyncResult<CharacterDomain>> {
+        return flow {
+            emit(AsyncResult.Loading())
+            val character = localDataSource.getCharacter(id).last()
+
+            if (character != null) {
+                emit(AsyncResult.Success(character.toDomain()))
+
+            } else {
+                emit(AsyncResult.Error(AsyncError.EmptyResponseError))
+            }
         }
     }
 

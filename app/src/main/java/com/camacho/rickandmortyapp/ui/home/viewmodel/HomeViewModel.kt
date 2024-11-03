@@ -11,6 +11,8 @@ import com.camacho.rickandmortyapp.domain.model.CharacterDomain
 import com.camacho.rickandmortyapp.domain.usecase.AddCharactersToLocalUseCase
 import com.camacho.rickandmortyapp.domain.usecase.GetAllCharactersUseCase
 import com.camacho.rickandmortyapp.domain.usecase.GetTotalsCharacters
+import com.camacho.rickandmortyapp.ui.home.model.CharacterHomeVO
+import com.camacho.rickandmortyapp.ui.home.model.toVO
 import com.camacho.rickandmortyapp.ui.home.uistate.RickAndMortyHomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +31,7 @@ class HomeViewModel @Inject constructor(
         private set
 
     private var isInitialized = false
-    private val characters = mutableListOf<CharacterDomain>()
+    private val charactersViewModel = mutableListOf<CharacterHomeVO>()
     private val genders = mutableListOf("none")
     private val species = mutableListOf("none")
 
@@ -58,10 +60,10 @@ class HomeViewModel @Inject constructor(
                 if (characters.isNotEmpty() &&
                     getTotalsCharacters() == characters.size
                 ) {
-                    this@HomeViewModel.characters.addAll(characters)
+                    charactersViewModel.addAll(characters.toVO())
                     fillGenders(characters)
                     fillSpecies(characters)
-                    state = state.copy(characters = characters, isLoading = false, error = null)
+                    state = state.copy(characters = charactersViewModel, isLoading = false, error = null)
 
                 } else {
                     addCharactersToLocalUseCase().collect {
@@ -86,20 +88,26 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun filterCharactersByGender(gender: String) {
-        if (gender == "none" || gender.isEmpty()) {
-            state = state.copy(isLoading = false, characters = characters, error = null)
-            return
-        }
-        state = state.copy(isLoading = false, characters = characters.filter { it.gender == gender }, error = null)
-    }
+    fun filterCharacters(gender: String, species: String) {
+        state = when {
+            (gender != "none" && gender.isNotEmpty()) &&
+                    (species != "none" && species.isNotEmpty()) -> {
+                state.copy(characters = charactersViewModel.filter { it.gender == gender && it.species == species })
+            }
 
-    fun filterCharactersBySpecies(species: String) {
-        if (species == "none" || species.isEmpty()) {
-            state = state.copy(isLoading = false, characters = characters, error = null)
-            return
-        }
-        state = state.copy(isLoading = false, characters = characters.filter { it.species == species }, error = null)
+            gender != "none" &&
+                    gender.isNotEmpty() -> {
+                state.copy(characters = charactersViewModel.filter { it.gender == gender })
+            }
 
+            species != "none" &&
+                    species.isNotEmpty() -> {
+                state.copy(characters = charactersViewModel.filter { it.species == species })
+            }
+
+            else -> {
+                state.copy(characters = charactersViewModel)
+            }
+        }
     }
 }

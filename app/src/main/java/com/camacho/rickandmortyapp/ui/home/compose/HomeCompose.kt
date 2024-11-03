@@ -42,17 +42,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.camacho.rickandmortyapp.domain.model.CharacterDomain
+import com.camacho.rickandmortyapp.ui.home.model.CharacterHomeVO
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RickAndMortyCharacterList(
-    characters: List<CharacterDomain>?,
+    characters: List<CharacterHomeVO>?,
     genders: List<String>,
     species: List<String>,
-    onSelectGender: (String) -> Unit,
-    onSelectSpecies: (String) -> Unit,
+    onSelectFilter: (String, String) -> Unit,
     onItemClick: (String) -> Unit
 ) {
 
@@ -60,8 +59,8 @@ fun RickAndMortyCharacterList(
         skipPartiallyExpanded = true
     )
     var showBottomSheet by remember { mutableStateOf(false) }
-    var selectedGender by remember { mutableStateOf<String?>(null) }
-    var selectedSpecies by remember { mutableStateOf<String?>(null) }
+    var selectedGender by remember { mutableStateOf("") }
+    var selectedSpecies by remember { mutableStateOf("") }
 
     Column(modifier = Modifier.fillMaxSize()) {
         ToolbarRickAndMorty {
@@ -93,10 +92,9 @@ fun RickAndMortyCharacterList(
                     Spacer(modifier = Modifier.size(16.dp))
                     Button(onClick = {
                         showBottomSheet = false
-                        selectedGender?.let { onSelectGender(it) }
-                        selectedSpecies?.let { onSelectSpecies(it) }
-                        selectedGender = null
-                        selectedSpecies = null
+                        onSelectFilter(selectedGender, selectedSpecies)
+                        selectedGender = ""
+                        selectedSpecies = ""
 
                     }) {
                         Text("Aceptar")
@@ -108,6 +106,7 @@ fun RickAndMortyCharacterList(
             LaunchedEffect(showBottomSheet) {
                 if (showBottomSheet) {
                     sheetState.show()
+
                 } else {
                     sheetState.hide()
                 }
@@ -119,7 +118,7 @@ fun RickAndMortyCharacterList(
 
 @Composable
 fun CharacterList(
-    characters: List<CharacterDomain>?,
+    characters: List<CharacterHomeVO>?,
     isSearchCharacters: Boolean,
     onClickElement: (String) -> Unit
 ) {
@@ -140,7 +139,7 @@ fun CharacterList(
 }
 
 @Composable
-fun ItemList(character: CharacterDomain, onClickElement: (String) -> Unit) {
+fun ItemList(character: CharacterHomeVO, onClickElement: (String) -> Unit) {
     Box(
         modifier = Modifier
             .padding(24.dp)
