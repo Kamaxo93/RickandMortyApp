@@ -89,18 +89,12 @@ fun LoginRickAndMorty() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ToolbarRickAndMorty(modifier: Modifier = Modifier) {
+fun ToolbarRickAndMorty(modifier: Modifier = Modifier, onFilterClicked: (Boolean) -> Unit) {
     var showMenu by remember { mutableStateOf(false) }
 
     TopAppBar(
         title = { Text("Rick and Morty", fontSize = 20.sp, fontWeight = FontWeight.Bold) },
         actions = {
-            IconButton(onClick = {}) {
-                Icon(
-                    Icons.Filled.Search,
-                    contentDescription = "Search"
-                )
-            }
             IconButton(onClick = { showMenu = !showMenu }) {
                 Icon(
                     Icons.Filled.MoreVert,
@@ -113,7 +107,10 @@ fun ToolbarRickAndMorty(modifier: Modifier = Modifier) {
             ) {
                 DropdownMenuItem(
                     text = { Text("Filtrar") },
-                    onClick = { showMenu = !showMenu }
+                    onClick = {
+                        onFilterClicked(true)
+                        showMenu = !showMenu
+                    }
                 )
             }
         }

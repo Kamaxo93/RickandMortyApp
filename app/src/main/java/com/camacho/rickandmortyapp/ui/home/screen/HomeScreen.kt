@@ -44,9 +44,19 @@ fun HomeScreen(
         }
 
         state.characters.isNullOrEmpty().not() -> {
-            RickAndMortyCharacterList(characters = state.characters) {
-                onItemClick(it)
-            }
+            RickAndMortyCharacterList(
+                characters = state.characters,
+                genders = viewModel.getGenders(),
+                species = viewModel.getSpecies(),
+                onSelectGender = {
+                    viewModel.filterCharactersByGender(it)
+                },
+                onSelectSpecies = {
+                    viewModel.filterCharactersBySpecies(it)
+                },
+                onItemClick = {}
+            )
+
         }
     }
 }
