@@ -3,4 +3,17 @@
     <string name="home_button_label_reload">Reintentar</string>
     <string name="home_text_error">Error al obtener los personajes</string>
     <string name="home_text_loading">Obteniendo personajes…</string>
+    <string name="accept">Aceptar</string>
+    <string name="home_text_filter">Filtros</string>
+    <string name="home_text_filter_gender">Gender</string>
+    <string name="home_text_filter_species">Specie</string>
+    <string name="home_text_toolbar">Rick And Morty</string>
+    <string name="item_menu_filter">Filtrar</string>
+    <string name="detail_text_status">Status</string>
+    <string name="detail_text_species">Species</string>
+    <string name="detail_text_gender">Gender</string>
+    <string name="detail_text_origin">Origin</string>
+    <string name="detail_text_location">Location</string>
+    <string name="detail_text_type">Type</string>
+    <string name="detail_text_number_of_episodes">Nº Episodios</string>
 </resources>

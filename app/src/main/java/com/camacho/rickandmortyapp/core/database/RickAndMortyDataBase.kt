@@ -10,6 +10,7 @@ import com.camacho.rickandmortyapp.data.local.model.CharacterEntity
 @Database(entities = [CharacterEntity::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class RickAndMortyDataBase: RoomDatabase() {
+
     abstract fun rickAndMortyDao(): RickAndMortyDao
 
 }

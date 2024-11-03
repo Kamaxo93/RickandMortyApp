@@ -6,6 +6,8 @@ import com.camacho.rickandmortyapp.domain.usecase.AddCharactersToLocalUseCase
 import com.camacho.rickandmortyapp.domain.usecase.AddCharactersToLocalUseCaseImpl
 import com.camacho.rickandmortyapp.domain.usecase.GetAllCharactersUseCase
 import com.camacho.rickandmortyapp.domain.usecase.GetAllCharactersUseCaseImpl
+import com.camacho.rickandmortyapp.domain.usecase.GetCharacterUseCase
+import com.camacho.rickandmortyapp.domain.usecase.GetCharacterUseCaseImpl
 import com.camacho.rickandmortyapp.domain.usecase.GetTotalsCharacters
 import com.camacho.rickandmortyapp.domain.usecase.GetTotalsCharactersImpl
 import dagger.Module
@@ -28,4 +30,9 @@ class UseCaseModule {
     @Provides
     fun provideGetTotalsCharactersUseCase(@MySharedPrefs shared: SharedPreferences): GetTotalsCharacters =
         GetTotalsCharactersImpl(shared)
+
+    @Provides
+    fun provideGetCharacterUseCase(repository: RickAndMortyRepository): GetCharacterUseCase =
+        GetCharacterUseCaseImpl(repository)
+
 }

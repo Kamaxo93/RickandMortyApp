@@ -38,7 +38,7 @@ fun HomeScreen(
         }
 
         state.error != null -> {
-            CharactersContainerError() {
+            CharactersContainerError(state.error) {
                 viewModel.reload()
             }
         }
@@ -48,13 +48,12 @@ fun HomeScreen(
                 characters = state.characters,
                 genders = viewModel.getGenders(),
                 species = viewModel.getSpecies(),
-                onSelectGender = {
-                    viewModel.filterCharactersByGender(it)
+                onSelectFilter = { gender, species ->
+                    viewModel.filterCharacters(gender, species)
                 },
-                onSelectSpecies = {
-                    viewModel.filterCharactersBySpecies(it)
-                },
-                onItemClick = {}
+                onItemClick = {
+                    onItemClick(it)
+                }
             )
 
         }

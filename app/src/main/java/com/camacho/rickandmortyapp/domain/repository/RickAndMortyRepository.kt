@@ -9,4 +9,6 @@ interface RickAndMortyRepository {
     suspend fun getAllCharacters(): Flow<List<CharacterDomain>>
 
     suspend fun addCharactersToLocal(): Flow<AsyncResult<Unit>>
+
+    suspend fun getCharacter(id: String): Flow<CharacterDomain>
 }

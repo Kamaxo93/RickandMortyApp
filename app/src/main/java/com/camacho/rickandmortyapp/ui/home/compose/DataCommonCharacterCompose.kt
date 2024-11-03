@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -34,6 +33,7 @@ import com.camacho.rickandmortyapp.R
 
 @Composable
 fun CharactersContainerError(
+    message: String = stringResource(R.string.home_text_error),
     onReloadClicked: () -> Unit
 ) {
     Column(
@@ -43,7 +43,7 @@ fun CharactersContainerError(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = stringResource(R.string.home_text_error),
+            text = message,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 28.sp,
             color = MaterialTheme.colorScheme.primary,
@@ -89,11 +89,11 @@ fun LoginRickAndMorty() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ToolbarRickAndMorty(modifier: Modifier = Modifier, onFilterClicked: (Boolean) -> Unit) {
+fun ToolbarRickAndMorty(onFilterClicked: (Boolean) -> Unit) {
     var showMenu by remember { mutableStateOf(false) }
 
     TopAppBar(
-        title = { Text("Rick and Morty", fontSize = 20.sp, fontWeight = FontWeight.Bold) },
+        title = { Text(stringResource(R.string.home_text_toolbar), fontSize = 20.sp, fontWeight = FontWeight.Bold) },
         actions = {
             IconButton(onClick = { showMenu = !showMenu }) {
                 Icon(
@@ -106,7 +106,7 @@ fun ToolbarRickAndMorty(modifier: Modifier = Modifier, onFilterClicked: (Boolean
                 onDismissRequest = { showMenu = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text("Filtrar") },
+                    text = { Text(stringResource(R.string.item_menu_filter)) },
                     onClick = {
                         onFilterClicked(true)
                         showMenu = !showMenu

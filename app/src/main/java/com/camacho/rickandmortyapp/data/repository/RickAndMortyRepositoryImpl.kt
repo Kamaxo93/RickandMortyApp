@@ -6,6 +6,7 @@ import com.camacho.rickandmortyapp.core.async.RepositoryErrorManager
 import com.camacho.rickandmortyapp.core.di.MySharedPrefs
 import com.camacho.rickandmortyapp.data.constan.Constant.MAX_NUMBER_PAGE
 import com.camacho.rickandmortyapp.data.local.datasource.RickAndMortyLocalDataSource
+import com.camacho.rickandmortyapp.data.local.mapper.toDomain
 import com.camacho.rickandmortyapp.data.local.mapper.toDomains
 import com.camacho.rickandmortyapp.data.local.model.CharacterEntity
 import com.camacho.rickandmortyapp.data.remote.datasorce.RickAndMortyRemoteDataSource
@@ -47,6 +48,10 @@ class RickAndMortyRepositoryImpl(
             }
             localDataSource.addCharacter(list)
         }
+    }
+
+    override suspend fun getCharacter(id: String): Flow<CharacterDomain> {
+        return localDataSource.getCharacter(id).map { it.toDomain() }
     }
 
     private suspend fun getCharactersFromRemote(page: Int?):
