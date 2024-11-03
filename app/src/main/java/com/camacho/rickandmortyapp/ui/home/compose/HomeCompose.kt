@@ -38,10 +38,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.camacho.rickandmortyapp.R
+import com.camacho.rickandmortyapp.data.constan.Constant.EMPTY_STRING
 import com.camacho.rickandmortyapp.ui.home.model.CharacterHomeVO
 import kotlinx.coroutines.launch
 
@@ -59,14 +62,15 @@ fun RickAndMortyCharacterList(
         skipPartiallyExpanded = true
     )
     var showBottomSheet by remember { mutableStateOf(false) }
-    var selectedGender by remember { mutableStateOf("") }
-    var selectedSpecies by remember { mutableStateOf("") }
+    var selectedGender by remember { mutableStateOf(EMPTY_STRING) }
+    var selectedSpecies by remember { mutableStateOf(EMPTY_STRING) }
+    var isFilterCharacters by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         ToolbarRickAndMorty {
             showBottomSheet = true
         }
-        CharacterList(characters = characters, isSearchCharacters = false) {
+        CharacterList(characters = characters, isFilterCharacters = isFilterCharacters) {
             onItemClick(it)
         }
         if (showBottomSheet) {
@@ -78,14 +82,14 @@ fun RickAndMortyCharacterList(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Filtros")
+                    Text(text = stringResource(R.string.home_text_filter))
                     Spacer(modifier = Modifier.size(16.dp))
-                    Row {
-                        FilterItems("Gender", genders) {
+                    Row(modifier = Modifier.padding(horizontal = 8.dp)) {
+                        FilterItems(stringResource(R.string.home_text_filter_gender), genders) {
                             selectedGender = it
                         }
                         Spacer(modifier = Modifier.size(100.dp))
-                        FilterItems("Species", species) {
+                        FilterItems(stringResource(R.string.home_text_filter_species), species) {
                             selectedSpecies = it
                         }
                     }
@@ -93,11 +97,12 @@ fun RickAndMortyCharacterList(
                     Button(onClick = {
                         showBottomSheet = false
                         onSelectFilter(selectedGender, selectedSpecies)
-                        selectedGender = ""
-                        selectedSpecies = ""
+                        selectedGender = EMPTY_STRING
+                        selectedSpecies = EMPTY_STRING
 
                     }) {
-                        Text("Aceptar")
+                        isFilterCharacters = true
+                        Text(stringResource(R.string.accept))
                     }
                 }
 
@@ -119,13 +124,13 @@ fun RickAndMortyCharacterList(
 @Composable
 fun CharacterList(
     characters: List<CharacterHomeVO>?,
-    isSearchCharacters: Boolean,
+    isFilterCharacters: Boolean,
     onClickElement: (String) -> Unit
 ) {
     val state = rememberLazyListState(0)
     val coroutineScope = rememberCoroutineScope()
     LazyColumn(state = state) {
-        if (isSearchCharacters) {
+        if (isFilterCharacters) {
             coroutineScope.launch {
                 state.scrollToItem(0)
             }

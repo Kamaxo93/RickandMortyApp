@@ -1,7 +1,6 @@
 package com.camacho.rickandmortyapp.data.repository
 
 import android.content.SharedPreferences
-import com.camacho.rickandmortyapp.core.async.AsyncError
 import com.camacho.rickandmortyapp.core.async.AsyncResult
 import com.camacho.rickandmortyapp.core.async.RepositoryErrorManager
 import com.camacho.rickandmortyapp.core.di.MySharedPrefs
@@ -15,7 +14,6 @@ import com.camacho.rickandmortyapp.domain.model.CharacterDomain
 import com.camacho.rickandmortyapp.domain.repository.RickAndMortyRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 
 class RickAndMortyRepositoryImpl(
@@ -52,18 +50,8 @@ class RickAndMortyRepositoryImpl(
         }
     }
 
-    override suspend fun getCharacter(id: String): Flow<AsyncResult<CharacterDomain>> {
-        return flow {
-            emit(AsyncResult.Loading())
-            val character = localDataSource.getCharacter(id).last()
-
-            if (character != null) {
-                emit(AsyncResult.Success(character.toDomain()))
-
-            } else {
-                emit(AsyncResult.Error(AsyncError.EmptyResponseError))
-            }
-        }
+    override suspend fun getCharacter(id: String): Flow<CharacterDomain> {
+        return localDataSource.getCharacter(id).map { it.toDomain() }
     }
 
     private suspend fun getCharactersFromRemote(page: Int?):

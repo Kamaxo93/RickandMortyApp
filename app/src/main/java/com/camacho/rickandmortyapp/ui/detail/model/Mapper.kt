@@ -12,8 +12,7 @@ fun CharacterDomain.toVO() = CharacterDetailVO(
     type = type,
     origin = origin,
     location = location,
-    episode = episode,
-    url = url
+    episode = episode
 )
 
 fun List<CharacterDomain>.toVO(): List<CharacterDetailVO> = map { it.toVO() }

@@ -38,7 +38,7 @@ fun HomeScreen(
         }
 
         state.error != null -> {
-            CharactersContainerError() {
+            CharactersContainerError(state.error) {
                 viewModel.reload()
             }
         }

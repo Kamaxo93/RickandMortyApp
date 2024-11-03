@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.camacho.rickandmortyapp.core.async.AsyncResult
 import com.camacho.rickandmortyapp.domain.usecase.GetCharacterUseCase
 import com.camacho.rickandmortyapp.ui.detail.model.toVO
 import com.camacho.rickandmortyapp.ui.detail.uistate.RickAndMortyDetailState
@@ -35,34 +34,8 @@ class DetailViewModel @Inject constructor(
     private fun getCharacter(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             getCharacterUseCase(id).collect { response ->
-                when (response) {
-                    is AsyncResult.Error -> {
-                        state = state.copy(
-                            isLoading = false,
-                            character = null,
-                            error = response.error.toString()
-                        )
-                    }
-
-                    is AsyncResult.Loading -> {
-                        state = state.copy(
-                            isLoading = true,
-                            character = null,
-                            error = null
-                        )
-                    }
-
-                    is AsyncResult.Success -> {
-                        state = state.copy(
-                            isLoading = false,
-                            character = response.data.toVO(),
-                            error = null
-                        )
-                    }
-                }
+                state = state.copy(character = response.toVO(), isLoading = false)
             }
-
         }
     }
-
 }

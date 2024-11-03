@@ -27,13 +27,18 @@ class HomeViewModel @Inject constructor(
     private val getTotalsCharacters: GetTotalsCharacters
 ) : ViewModel() {
 
+    companion object {
+        private const val NONE = "none"
+        private const val ERROR_FILTER = "No se encontraron resultados"
+    }
+
     var state by mutableStateOf(RickAndMortyHomeState())
         private set
 
     private var isInitialized = false
     private val charactersViewModel = mutableListOf<CharacterHomeVO>()
-    private val genders = mutableListOf("none")
-    private val species = mutableListOf("none")
+    private val genders = mutableListOf(NONE)
+    private val species = mutableListOf(NONE)
 
     @MainThread
     fun initializeDataState() {
@@ -89,25 +94,31 @@ class HomeViewModel @Inject constructor(
     }
 
     fun filterCharacters(gender: String, species: String) {
-        state = when {
+        val listFilter = when {
             (gender != "none" && gender.isNotEmpty()) &&
                     (species != "none" && species.isNotEmpty()) -> {
-                state.copy(characters = charactersViewModel.filter { it.gender == gender && it.species == species })
+                charactersViewModel.filter { it.gender == gender && it.species == species }
             }
 
             gender != "none" &&
                     gender.isNotEmpty() -> {
-                state.copy(characters = charactersViewModel.filter { it.gender == gender })
+                charactersViewModel.filter { it.gender == gender }
             }
 
             species != "none" &&
                     species.isNotEmpty() -> {
-                state.copy(characters = charactersViewModel.filter { it.species == species })
+                charactersViewModel.filter { it.species == species }
             }
 
             else -> {
-                state.copy(characters = charactersViewModel)
+                charactersViewModel
             }
+        }
+        state = if (listFilter.isNotEmpty()) {
+            state.copy(isLoading = false, characters = listFilter, error = null)
+
+        } else {
+            state.copy(isLoading = false, characters = null, error = "No se encontraron resultados")
         }
     }
 }

@@ -10,6 +10,5 @@ data class CharacterDetailVO(
     val origin: String,
     val location: String,
     val image: String,
-    val episode: List<String>,
-    val url: String,
+    val episode: List<String>
 )

@@ -20,7 +20,9 @@ fun NavigationRickAndMorty() {
 
         composable<Detail> { backStackEntry ->
             val detail: Detail = backStackEntry.toRoute()
-            DetailScreen(id = detail.id)
+            DetailScreen(id = detail.id) {
+                navController.popBackStack()
+            }
         }
     }
 }

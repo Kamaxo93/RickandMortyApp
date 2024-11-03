@@ -33,6 +33,7 @@ import com.camacho.rickandmortyapp.R
 
 @Composable
 fun CharactersContainerError(
+    message: String = stringResource(R.string.home_text_error),
     onReloadClicked: () -> Unit
 ) {
     Column(
@@ -42,7 +43,7 @@ fun CharactersContainerError(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = stringResource(R.string.home_text_error),
+            text = message,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 28.sp,
             color = MaterialTheme.colorScheme.primary,
@@ -92,7 +93,7 @@ fun ToolbarRickAndMorty(onFilterClicked: (Boolean) -> Unit) {
     var showMenu by remember { mutableStateOf(false) }
 
     TopAppBar(
-        title = { Text("Rick and Morty", fontSize = 20.sp, fontWeight = FontWeight.Bold) },
+        title = { Text(stringResource(R.string.home_text_toolbar), fontSize = 20.sp, fontWeight = FontWeight.Bold) },
         actions = {
             IconButton(onClick = { showMenu = !showMenu }) {
                 Icon(
@@ -105,7 +106,7 @@ fun ToolbarRickAndMorty(onFilterClicked: (Boolean) -> Unit) {
                 onDismissRequest = { showMenu = false }
             ) {
                 DropdownMenuItem(
-                    text = { Text("Filtrar") },
+                    text = { Text(stringResource(R.string.item_menu_filter)) },
                     onClick = {
                         onFilterClicked(true)
                         showMenu = !showMenu
